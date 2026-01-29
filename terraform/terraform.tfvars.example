@@ -1,0 +1,19 @@
+# AWS Configuration
+aws_region = "us-east-1"
+environment = "production"
+
+# Budget Configuration
+budget_amount = "200"
+budget_start_date = "2026-02-01_00:00"  # Format: YYYY-MM-DD_HH:MM
+
+# Slack Configuration
+slack_webhook_url = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Optional: Email notification for 100% threshold
+notification_email = ""  # Leave empty to disable email notifications
+
+# Optional: Additional tags
+tags = {
+  Team = "DevOps"
+  CostCenter = "Engineering"
+}
