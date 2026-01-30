@@ -77,39 +77,16 @@ def send_slack_notification(webhook_url, budget_info):
     """Send formatted notification to Slack"""
     config = get_notification_config(budget_info['threshold'])
 
-    # Build Slack message
+    # Build Slack Workflow Webhook message (simple key-value format)
+    # Slack Workflow expects flat JSON, not attachments format
     message = {
-        'attachments': [
-            {
-                'color': config['color'],
-                'title': f"{config['icon']} AWS Bedrock 予算アラート [{config['level']}]",
-                'fields': [
-                    {
-                        'title': '閾値',
-                        'value': f"{budget_info['threshold']:.0f}%",
-                        'short': True
-                    },
-                    {
-                        'title': '現在の使用額',
-                        'value': f"${budget_info['actual_amount']:.2f} USD",
-                        'short': True
-                    },
-                    {
-                        'title': '予算上限',
-                        'value': f"${budget_info['limit_amount']:.0f} USD",
-                        'short': True
-                    },
-                    {
-                        'title': '使用率',
-                        'value': f"{budget_info['usage_percentage']:.1f}%",
-                        'short': True
-                    }
-                ],
-                'footer': 'AWS Bedrock Cost Monitor',
-                'ts': int(datetime.now().timestamp())
-            }
-        ]
+        'budget_name': budget_info['budget_name'],
+        'threshold': budget_info['threshold'],
+        'actual_amount': budget_info['actual_amount'],
+        'limit_amount': budget_info['limit_amount']
     }
+
+    print(f"Sending to Slack: {json.dumps(message)}")
 
     try:
         encoded_message = json.dumps(message).encode('utf-8')
